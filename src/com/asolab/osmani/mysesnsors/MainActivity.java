@@ -1,6 +1,12 @@
 package com.asolab.osmani.mysesnsors;
 
 import java.util.HashMap;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+
+
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Context;
@@ -76,6 +82,15 @@ public class MainActivity extends ListActivity
     	
     		    	
     	setListAdapter(new ListAdapter(mContext, R.layout.list_view_item, objects, icons));
+    	
+    	/*AdView adView;
+		AdRequest adRequest = new AdRequest();
+		adView= (AdView)findViewById(R.id.adView);
+		adView.loadAd(adRequest);*/
+    	
+    	AdView adView = (AdView)this.findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		adView.loadAd(adRequest);
 	}		
 	
 

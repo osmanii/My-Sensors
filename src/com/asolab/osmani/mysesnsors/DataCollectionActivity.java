@@ -1,9 +1,20 @@
 package com.asolab.osmani.mysesnsors;
 
 import java.io.File;
+import java.io.FileWriter;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import com.db.entities.GyroscopeRecord;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.opencsv.CSVWriter;
+
+
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -21,6 +32,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import jxl.*; 
 import jxl.write.*;
@@ -69,7 +81,7 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 	WritableSheet sheetHum;	
 	WritableSheet sheetTemp_2;
 	
-	int [] countIndex;
+	//int [] countIndex;
 	
 	String [] worksheetNames = {"Accelerometer", "Magnetic Field", "Orientation", "Gyroscope" ,
 			"Light", "Pressure", "Temperature", "Proximity", "Gravity", "Linear Acceleration",
@@ -139,7 +151,16 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 			mSensors[i] = mSensorManager.getDefaultSensor(sensor_index[i]);
 			i++;
 		}
-
+		
+/*		AdView adView;
+		AdRequest adRequest = new AdRequest();
+		adView= (AdView)findViewById(R.id.adView);
+		adView.loadAd(adRequest);
+*/
+		
+		AdView adView = (AdView)this.findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		adView.loadAd(adRequest);
 
 		
 	}
@@ -172,7 +193,7 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 	    // Unregister the listener
 	    mSensorManager.unregisterListener(this);
 	    
-	    if(!fileWrite)
+	    /*if(!fileWrite)
 		try
 		{
 				workbook.write();
@@ -181,7 +202,7 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 		catch(Exception ex)
 		{
 			ex.printStackTrace();
-		}
+		}*/
 		super.onStop();
 	}
 	
@@ -194,7 +215,7 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 	}
 	
 	
-	public void initializeExcelFile()
+	/*public void initializeExcelFile()
 	{
 		int i;
 		
@@ -228,7 +249,7 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 						
 //            File fileSystemRoot = Environment.getExternalStorageDirectory();            
 			
-/*	        <item>TYPE_ACCELROMETER</item>
+	        <item>TYPE_ACCELROMETER</item>
 	        <item>TYPE_AMBIENT_TEMPERATURE</item>
 	        <item>TYPE_GRAVITY</item>
 	        <item>TYPE_GYROSCOPE</item>
@@ -241,7 +262,7 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 	        <item>TYPE_RELATIVE_HUMIDITY</item>
 	        <item>TYPE_ROTATION_VECTOR</item>
 			<item>TYPE_TEMPERATURE</item>                
-*/
+
 	        
 			i = 0;
 			if(mSensors[0]!=null)
@@ -362,7 +383,7 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
             ex.printStackTrace();
         } 
 	}
-
+*/
 	@Override
 	public void onClick(View v) 
 	{
@@ -371,7 +392,7 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 		{
 			collectData = true;
 			fileWrite = false;
-			initializeExcelFile();
+			//initializeExcelFile();
 			mHandler.sendEmptyMessage(MSG_START_TIMER);			
 		}
 		else if(v == stop)
@@ -381,15 +402,47 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 			mHandler.sendEmptyMessage(MSG_STOP_TIMER);
 			try
 			{
-					workbook.write();
-					workbook.close();	
-					fileWrite = true;
+				//workbook.write();
+				//workbook.close();
+				exportToCSV();
+				fileWrite = true;
 			}
 			catch(Exception ex)
 			{
 				ex.printStackTrace();
 			}
 			
+		}
+		
+	}
+	
+	public void exportToCSV(){
+		
+		try{
+			String csv = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+			String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+			csv = csv +"/gyro_"+fileName+".csv";
+			
+			CSVWriter writer = new CSVWriter(new FileWriter(csv));
+
+			List<String[]> data = new ArrayList<String[]>();
+			
+			data.add(new String[] {"X","Y","Z"});
+			
+			List<GyroscopeRecord> allData = GyroscopeRecord.listAll(GyroscopeRecord.class);		
+			
+			for(GyroscopeRecord record: allData){
+				data.add(new String[] {record.X, record.Y, record.Z});
+			}
+			
+			Toast.makeText(getApplicationContext(), "size:"+allData.size(),Toast.LENGTH_LONG).show();
+			writer.writeAll(data);
+			writer.close();
+			
+			GyroscopeRecord.deleteAll(GyroscopeRecord.class); // clearing all data from DB after exporting.s
+		}catch(Exception ex){
+			ex.printStackTrace();
+			Toast.makeText(getApplicationContext(), "error:"+ex.getMessage(),Toast.LENGTH_LONG).show();
 		}
 		
 	}
@@ -419,145 +472,150 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 			{		
 				/* Accelerometer */
 				case 1:	
-					number = new Number(0, countIndex[0], event.values[0]); 
+					/*number = new Number(0, countIndex[0], event.values[0]); 
 					sheetAcc.addCell(number);
 					number = new Number(1, countIndex[0], event.values[1]); 
 					sheetAcc.addCell(number);
 					number = new Number(2, countIndex[0], event.values[2]); 
 					sheetAcc.addCell(number);
 					
-					countIndex[0]++;
+					countIndex[0]++;*/
 
 					break;
 				
 				/* Magnetic Field */
 				case 2:									
-					number = new Number(0, countIndex[1], event.values[0]); 
+					/*number = new Number(0, countIndex[1], event.values[0]); 
 					sheetMag.addCell(number);
 					number = new Number(1, countIndex[1], event.values[1]); 
 					sheetMag.addCell(number);
 					number = new Number(2, countIndex[1], event.values[2]); 
 					sheetMag.addCell(number);
 	
-					countIndex[1]++;
+					countIndex[1]++;*/
 	
 					break;
 				
 				/* Orientation */
 				case 3:
-					number = new Number(0, countIndex[2], event.values[0]); 
+					/*number = new Number(0, countIndex[2], event.values[0]); 
 					sheetOrn.addCell(number);
 					number = new Number(1, countIndex[2], event.values[1]); 
 					sheetOrn.addCell(number);
 					number = new Number(2, countIndex[2], event.values[2]); 
 					sheetOrn.addCell(number);
 	
-					countIndex[2]++;
+					countIndex[2]++;*/
 	
 					break;
 					
 				/* Gyroscope */		
 				case 4:
-					number = new Number(0, countIndex[3], event.values[0]); 
+					/*number = new Number(0, countIndex[3], event.values[0]); 
 					sheetGyr.addCell(number);
 					number = new Number(1, countIndex[3], event.values[1]); 
 					sheetGyr.addCell(number);
 					number = new Number(2, countIndex[3], event.values[2]); 
-					sheetGyr.addCell(number);
+					sheetGyr.addCell(number);*/
+					
+//					GyroscopeRecord gyroscopeRecord = new GyroscopeRecord();
+//					gyroscopeRecord.save();
+					
+					new DBSaveThread(event.values[0]+"", event.values[1]+"", event.values[2]+"").start();
 	
-					countIndex[3]++;
+					//countIndex[3]++;
 	
 					break;
 					
 				/* Light */			
 				case 5:
-					number = new Number(0, countIndex[4], event.values[0]); 
+					/*number = new Number(0, countIndex[4], event.values[0]); 
 					sheetLit.addCell(number);
 	
-					countIndex[4]++;
+					countIndex[4]++;*/
 	
 					break;
 					
 				/* Pressure */			
 				case 6:
-					number = new Number(0, countIndex[5], event.values[0]); 
+				/*	number = new Number(0, countIndex[5], event.values[0]); 
 					sheetPrs.addCell(number);
 	
-					countIndex[5]++;
+					countIndex[5]++;*/
 	
 					break;
 					
 				/* Temperature */			
 				case 7:
-					number = new Number(0, countIndex[6], event.values[0]); 
+/*					number = new Number(0, countIndex[6], event.values[0]); 
 					sheetTemp_1.addCell(number);
 	
-					countIndex[6]++;
+					countIndex[6]++;*/
 	
 					break;
 					
 				/* Proximity */			
 				case 8:
-					number = new Number(0, countIndex[7], event.values[0]); 
+					/*number = new Number(0, countIndex[7], event.values[0]); 
 					sheetPrx.addCell(number);
 	
-					countIndex[7]++;
+					countIndex[7]++;*/
 	
 					break;
 					
 				/* Gravity */			
 				case 9:
-					number = new Number(0, countIndex[8], event.values[0]); 
+					/*number = new Number(0, countIndex[8], event.values[0]); 
 					sheetGrv.addCell(number);
 					number = new Number(1, countIndex[8], event.values[1]); 
 					sheetGrv.addCell(number);
 					number = new Number(2, countIndex[8], event.values[2]); 
 					sheetGrv.addCell(number);
 	
-					countIndex[8]++;
+					countIndex[8]++;*/
 	
 					break;
 					
 				/* Linear Acceleration */			
 				case 10:
-					number = new Number(0, countIndex[9], event.values[0]); 
+					/*number = new Number(0, countIndex[9], event.values[0]); 
 					sheetLAcc.addCell(number);
 					number = new Number(1, countIndex[9], event.values[1]); 
 					sheetLAcc.addCell(number);
 					number = new Number(2, countIndex[9], event.values[2]); 
 					sheetLAcc.addCell(number);
 	
-					countIndex[9]++;
+					countIndex[9]++;*/
 	
 					break;
 					
 				/* Rotation Vector */			
 				case 11:
-					number = new Number(0, countIndex[10], event.values[0]); 
+					/*number = new Number(0, countIndex[10], event.values[0]); 
 					sheetRVct.addCell(number);
 					number = new Number(1, countIndex[10], event.values[1]); 
 					sheetRVct.addCell(number);
 					number = new Number(2, countIndex[10], event.values[2]); 
 					sheetRVct.addCell(number);
 	
-					countIndex[10]++;
+					countIndex[10]++;*/
 	
 					break;
 					
 				/* Relative Humidity */			
 				case 12:
-					number = new Number(0, countIndex[11], event.values[0]); 
+					/*number = new Number(0, countIndex[11], event.values[0]); 
 					sheetHum.addCell(number);
 	
-					countIndex[11]++;
+					countIndex[11]++;*/
 	
 					break;
 				/* Ambient Temperature */			
 				case 13:
-					number = new Number(0, countIndex[12], event.values[0]); 
+					/*number = new Number(0, countIndex[12], event.values[0]); 
 					sheetTemp_2.addCell(number);
 	
-					countIndex[12]++;
+					countIndex[12]++;*/
 	
 					break;
 			}
@@ -571,4 +629,28 @@ public class DataCollectionActivity extends Activity implements OnClickListener,
 	}
 
 
+	private class DBSaveThread extends Thread{
+		
+		private String X,Y,Z;
+
+		public DBSaveThread(String x, String y, String z) {
+		
+			X = x;
+			Y = y;
+			Z = z;
+		}
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			GyroscopeRecord gyroscopeRecord = new GyroscopeRecord(X, Y, Z);
+			gyroscopeRecord.save();
+		}
+		
+		
+		
+		
+	}
+	
+	
 }

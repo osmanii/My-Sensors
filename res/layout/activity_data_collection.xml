@@ -1,8 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+	xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".RecordActivity" >
+    android:layout_height="match_parent" >
 
     <Button
         android:id="@+id/start"
@@ -46,5 +46,20 @@
         android:layout_marginTop="15dp"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <!-- <com.google.ads.AdView android:id="@+id/adView"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         ads:adUnitId="a151139e390eb29"
+                         ads:adSize="BANNER"
+                         ads:loadAdOnCreate="true"
+                         android:layout_below="@+id/stop"/> -->
+    
+    <com.google.android.gms.ads.AdView  android:id="@+id/adView"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         ads:adUnitId="ca-app-pub-4702051948231102/2686725475"
+                         ads:adSize="BANNER"
+                         android:layout_below="@+id/stop"/>
 
 </RelativeLayout>

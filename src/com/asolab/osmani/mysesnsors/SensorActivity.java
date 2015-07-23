@@ -8,6 +8,10 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,7 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import au.com.bytecode.opencsv.CSVWriter;
+//import au.com.bytecode.opencsv.CSVWriter;
 
 public class SensorActivity extends Activity implements SensorEventListener, OnClickListener{
 
@@ -125,6 +129,15 @@ public class SensorActivity extends Activity implements SensorEventListener, OnC
 
 		
 		setSensorValueLabel();
+		
+		/*AdView adView;
+		AdRequest adRequest = new AdRequest();
+		adView= (AdView)findViewById(R.id.adView);
+		adView.loadAd(adRequest);*/
+		
+		AdView adView = (AdView)this.findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		adView.loadAd(adRequest);
 		
 //		sensor_details += "Vendor: " + mSensor.getVendor() + "\n";
 //		sensor_details += "Max Range: " + mSensor.getMaximumRange() + "\n";
@@ -249,7 +262,6 @@ public class SensorActivity extends Activity implements SensorEventListener, OnC
 		/* Relative Humidity */		
 		case 12:
 			textView12.setText("Humidity");
-
 			textView14.setText(" Humidity ");
 			
 			break;
@@ -415,7 +427,7 @@ public class SensorActivity extends Activity implements SensorEventListener, OnC
 			
 		}
 		
-		private void storeSensorData()
+	/*	private void storeSensorData()
 		{
 	        try
 	        {
@@ -450,5 +462,5 @@ public class SensorActivity extends Activity implements SensorEventListener, OnC
 		    }
 		}
 
-
+*/
 }

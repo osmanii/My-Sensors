@@ -23,6 +23,12 @@ import org.achartengine.renderer.XYSeriesRenderer;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+
+
+
 
 public class GraphActivity extends Activity implements OnClickListener, SensorEventListener
 {
@@ -66,6 +72,15 @@ public class GraphActivity extends Activity implements OnClickListener, SensorEv
 		mSensor = mSensorManager.getDefaultSensor(sensor_index[Integer.parseInt(selected_sensor)]);
 
 		graphSettings();
+		
+	/*	AdView adView;
+		AdRequest adRequest = new AdRequest();
+		adView= (AdView)findViewById(R.id.adView);
+		adView.loadAd(adRequest);*/
+		
+		AdView adView = (AdView)this.findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		adView.loadAd(adRequest);
     }
     
     @SuppressLint("NewApi")
