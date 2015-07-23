@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="object_names">
+        <item>Accelerometer</item>
+        <item>Ambient Temperature</item>
+        <item>Gravity</item>
+        <item>Gyroscope</item>
+        <item>Light</item>
+        <item>Linear Acceleration</item>
+        <item>Magnetic Field</item>
+        <item>Orientation</item>
+        <item>Pressure</item>
+        <item>Proximity</item>
+        <item>Relative Humidity</item>
+        <item>Rotation Vector</item>
+		<item>Temperature</item>                
+    </string-array>
+    
+    <array name="object_icons">
+        <item>@drawable/cross</item>
+        <item>@drawable/tick</item>
+        <item>@drawable/cross</item>
+        <item>@drawable/tick</item>
+        <item>@drawable/cross</item>        
+        <item>@drawable/cross</item>
+        <item>@drawable/tick</item>
+        <item>@drawable/cross</item>
+        <item>@drawable/tick</item>
+        <item>@drawable/cross</item>        
+        <item>@drawable/cross</item>
+        <item>@drawable/tick</item>
+        <item>@drawable/cross</item>       
+	</array>
+	
+    <string-array name="sensor_name">
+        <item>TYPE_ACCELROMETER</item>
+        <item>TYPE_AMBIENT_TEMPERATURE</item>
+        <item>TYPE_GRAVITY</item>
+        <item>TYPE_GYROSCOPE</item>
+        <item>TYPE_LIGHT</item>
+        <item>TYPE_LINEAR_ACCELERATION</item>
+        <item>TYPE_MAGNETIC_FIELD</item>
+        <item>TYPE_ORIENTATION</item>
+        <item>TYPE_PRESSURE</item>
+        <item>TYPE_PROXIMITY</item>
+        <item>TYPE_RELATIVE_HUMIDITY</item>
+        <item>TYPE_ROTATION_VECTOR</item>
+		<item>TYPE_TEMPERATURE</item>                
+    </string-array>
+    
+    <integer-array name="sensor_index">
+        <item>1</item>
+        <item>13</item>
+        <item>9</item>
+        <item>4</item>
+        <item>5</item>
+        <item>10</item>
+        <item>2</item>
+        <item>3</item>
+        <item>6</item>
+        <item>8</item>
+        <item>12</item>
+        <item>11</item>
+		<item>7</item>                
+    </integer-array>
+    
+    <array name="sensor_view">
+        <item>@drawable/axis_device</item>
+        <item>@drawable/tick</item>
+        <item>@drawable/axis_device</item>
+        <item>@drawable/axis_globe</item>
+        <item>@drawable/cross</item>        
+        <item>@drawable/axis_device</item>
+        <item>@drawable/axis_device</item>
+        <item>@drawable/axis_device</item>
+        <item>@drawable/tick</item>
+        <item>@drawable/cross</item>        
+        <item>@drawable/cross</item>
+        <item>@drawable/axis_globe</item>
+        <item>@drawable/cross</item>       
+	</array>
+    
+   
+</resources>
